@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import CameraCapture from './components/CameraCapture';
 import LoadingSpinner from './components/LoadingSpinner';
 import VideoPlayer from './components/VideoPlayer';
-import { useRouter } from 'next/navigation';
 
 interface VideoData {
   videoId: string;
@@ -20,7 +19,7 @@ export default function Home() {
   const [showReset, setShowReset] = useState(false);
   const [resetPassword, setResetPassword] = useState('');
   const [isResetting, setIsResetting] = useState(false);
-  const router = useRouter();
+  const [countdown, setCountdown] = useState<number | null>(null);
 
   // Check if a video already exists on load
   useEffect(() => {
@@ -45,16 +44,63 @@ export default function Home() {
     setError(null);
   };
 
+  // Countdown timer effect
+  useEffect(() => {
+    if (countdown === null || countdown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev === null || prev <= 1) {
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [countdown]);
+
+  // Poll for video when processing
+  useEffect(() => {
+    if (!isProcessing) return;
+
+    const pollInterval = setInterval(async () => {
+      try {
+        const response = await fetch('/api/upload-selfie');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.videoId && data.videoUrl) {
+            // Video is ready!
+            setCurrentVideo({
+              videoId: data.videoId,
+              videoUrl: data.videoUrl,
+              prompt: data.prompt || 'A Christmas video created with Justin\'s AI magic!',
+            });
+            setIsProcessing(false);
+            setCountdown(null);
+            clearInterval(pollInterval);
+          }
+        }
+      } catch (err) {
+        console.error('Error polling for video:', err);
+      }
+    }, 2000); // Poll every 2 seconds
+
+    return () => clearInterval(pollInterval);
+  }, [isProcessing]);
+
   const handleSubmit = async () => {
     if (!selectedFile) return;
 
     setIsProcessing(true);
     setError(null);
+    setCountdown(120); // Start 2-minute countdown
 
     try {
       const formData = new FormData();
       formData.append('selfie', selectedFile);
 
+      // Start the video generation (this will take time)
       const response = await fetch('/api/upload-selfie', {
         method: 'POST',
         body: formData,
@@ -67,20 +113,25 @@ export default function Home() {
 
       const data = await response.json();
       
-      if (data.videoId) {
-        // Set the current video and stay on home page
+      if (data.videoId && data.videoUrl) {
+        // Video is ready immediately (unlikely but possible)
         setCurrentVideo({
           videoId: data.videoId,
           videoUrl: data.videoUrl,
           prompt: data.prompt,
         });
         setIsProcessing(false);
+        setCountdown(null);
+      } else if (data.videoId) {
+        // Video ID returned but video still processing - polling will handle it
+        // Keep isProcessing true so polling continues
       } else {
         throw new Error('No video ID returned');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
       setIsProcessing(false);
+      setCountdown(null);
     }
   };
 
@@ -219,7 +270,25 @@ export default function Home() {
           </div>
         ) : (
           <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-12 border-4 border-christmas-red">
-            <LoadingSpinner message="Creating your Christmas video... This may take a minute!" />
+            <LoadingSpinner message="Creating your Christmas video..." />
+            {countdown !== null && (
+              <div className="mt-6 space-y-4">
+                <div className="text-center">
+                  <div className="text-6xl font-bold text-christmas-red mb-2">
+                    {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}
+                  </div>
+                  <p className="text-lg text-gray-600">
+                    Estimated time remaining
+                  </p>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                  <div 
+                    className="bg-gradient-to-r from-christmas-red to-christmas-green h-4 rounded-full transition-all duration-1000"
+                    style={{ width: `${((120 - countdown) / 120) * 100}%` }}
+                  />
+                </div>
+              </div>
+            )}
             <p className="mt-6 text-gray-600 text-lg">
               Justin's AI elves are crafting your Christmas masterpiece! 🎅✨
             </p>
@@ -228,7 +297,7 @@ export default function Home() {
 
         {/* Footer */}
         <p className="text-sm text-gray-500">
-          Powered by Justin's AI magic ✨ | Your Christmas video will be ready in about 30-60 seconds
+          Powered by Justin's AI magic ✨ | Your Christmas video will be ready in about 2 minutes
         </p>
       </div>
     </main>
