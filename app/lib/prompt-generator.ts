@@ -3,6 +3,11 @@ import { openaiForPrompt } from './openai';
 export async function generateChristmasPrompt(
   imageBase64: string
 ): Promise<string> {
+  // Validate API key is set
+  if (!process.env.LLM_API_KEY && !process.env.OPENAI_API_KEY) {
+    throw new Error('LLM_API_KEY or OPENAI_API_KEY must be set');
+  }
+
   const response = await openaiForPrompt.chat.completions.create({
     model: 'gpt-4o',
     messages: [
