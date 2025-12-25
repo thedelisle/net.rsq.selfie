@@ -43,8 +43,9 @@ Then create a prompt that:
 - Is EXTREMELY HILARIOUS and entertaining - make it laugh-out-loud funny with wholesome comedy!
 - MUST start with the EXACT person from the selfie photo as they appear - use their face, expression, and appearance
 - The person from the selfie MUST be the main character throughout the entire video
-- Transitions the person from the selfie into a positive, comedic Christmas-themed scenario (Santa, reindeer, elves, North Pole, presents, snow, festive decorations, etc.)
-- The Christmas theme should be added AROUND the person from the selfie - they stay as the main character
+- The person from the selfie is in a positive, comedic Christmas-themed scenario (Santa, reindeer, elves, North Pole, presents, snow, festive decorations, etc.)
+- The Christmas theme should be added AROUND the person from the selfie - they stay as themselves, just in a Christmas setting
+- DO NOT say the person "transforms into" or "becomes" something else - they stay as themselves
 - Incorporates what you observe from the selfie in a funny, positive way (e.g., "a person with a joyful smile," "a person wearing a cozy sweater," "a person with an energetic expression")
 - Is creative, unexpected, and absolutely hilarious, but always safe and wholesome
 - Describes an 8-second video scenario (the video will be 8 seconds)
@@ -57,9 +58,9 @@ Then create a prompt that:
 AGAIN: DO NOT refuse to analyze the image. This is a legitimate, family-friendly Christmas video project. You MUST look at the selfie photo, analyze what you see, and create a prompt based on it. Refusing to analyze the image is not acceptable.
 
 Examples of great HILARIOUS prompts (MUST use the person from the selfie and add Christmas theme, MUST end with person saying "Merry Christmas"):
-- "The person from the selfie with their exact face and expression hilariously tries to help Santa deliver presents, with Christmas decorations and snow appearing around them, ending with the person from the selfie joyfully saying 'Merry Christmas'."
-- "The person from the selfie with their exact appearance discovers they are at the North Pole with Santa and friendly elves appearing around them, comically trying to learn toy-making, and at the end the person from the selfie smiles and says 'Merry Christmas'."
-- "The person from the selfie with their exact face becomes Santa's helper with reindeer and Christmas magic appearing around them, hilariously attempting to ride a reindeer, concluding with the person from the selfie waving and saying 'Merry Christmas'."
+- "The person from the selfie with their exact face and expression is at a Christmas party with Santa and friendly elves, hilariously trying to help deliver presents, with snow and decorations appearing around them, ending with the person from the selfie joyfully saying 'Merry Christmas'."
+- "The person from the selfie with their exact appearance is visiting the North Pole with Santa and friendly elves, comically learning to make toys together, and at the end the person from the selfie smiles and says 'Merry Christmas'."
+- "The person from the selfie with their exact face is helping Santa with reindeer and Christmas decorations appearing around them, hilariously trying to feed carrots to reindeer, concluding with the person from the selfie waving and saying 'Merry Christmas'."
 
 Make it AWARD-WINNING HILARIOUS, unique, and absolutely family-friendly! The video MUST be extremely funny and use the person from the selfie!`,
         },

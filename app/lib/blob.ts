@@ -34,3 +34,18 @@ export async function deleteVideoFromBlob(pathname: string): Promise<void> {
   });
 }
 
+export async function listSelfiesFromBlob(): Promise<Array<{ url: string; uploadedAt: Date; pathname: string }>> {
+  const { blobs } = await list({
+    prefix: 'selfies/',
+    token: process.env.BLOB_READ_WRITE_TOKEN,
+  });
+  
+  return blobs
+    .map(blob => ({
+      url: blob.url,
+      uploadedAt: blob.uploadedAt,
+      pathname: blob.pathname,
+    }))
+    .sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime()); // Sort by newest first
+}
+

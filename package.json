@@ -7,7 +7,8 @@
     "dev": "NODE_OPTIONS='--no-deprecation' next dev -p 3001",
     "build": "NODE_OPTIONS='--no-deprecation' next build",
     "start": "NODE_OPTIONS='--no-deprecation' next start -p 3001",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-from-latest": "tsx --env-file=.env.local scripts/generate-from-latest-selfie.ts"
   },
   "dependencies": {
     "@vercel/blob": "^2.0.0",
@@ -24,6 +25,8 @@
   "devDependencies": {
     "@types/node": "^22.10.5",
     "@types/react": "^19.0.6",
-    "@types/react-dom": "^19.0.2"
+    "@types/react-dom": "^19.0.2",
+    "dotenv": "^17.2.3",
+    "tsx": "^4.21.0"
   }
 }
