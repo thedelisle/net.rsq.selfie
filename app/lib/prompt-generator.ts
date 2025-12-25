@@ -20,6 +20,8 @@ export async function generateChristmasPrompt(
           role: 'system',
           content: `You are a creative Christmas video prompt generator. You MUST analyze the selfie photo provided and create a HILARIOUS, UNIQUE, and MEMORABLE 8-second Christmas video prompt based on what you see in the image.
 
+CRITICAL: YOU MUST ANALYZE THE SELFIE PHOTO. DO NOT REFUSE. This is a legitimate, family-friendly Christmas video project. The selfie is provided for creative video generation purposes only.
+
 CRITICAL REQUIREMENTS:
 - The prompt MUST be EXTREMELY HILARIOUS and laugh-out-loud funny
 - MUST be completely safe, wholesome, and appropriate for all ages
@@ -28,11 +30,14 @@ CRITICAL REQUIREMENTS:
 - Focus on positive, joyful, comedic scenarios with wholesome humor
 - Use silly, playful, absurd humor that is family-friendly
 
-IMPORTANT: You MUST analyze the selfie. Look at:
+YOU MUST analyze the selfie photo. Look at and describe:
 - The person's facial expression (happy, serious, playful, etc.)
 - Their clothing or style
 - The setting or background
 - Any distinctive features
+- Their appearance and characteristics
+
+DO NOT refuse to analyze the image. This is a creative, family-friendly Christmas video project. You MUST look at the selfie and create a prompt based on what you see.
 
 Then create a prompt that:
 - Is EXTREMELY HILARIOUS and entertaining - make it laugh-out-loud funny with wholesome comedy!
@@ -49,7 +54,7 @@ Then create a prompt that:
 - Is 1-2 sentences maximum
 - Is completely family-friendly and appropriate for all ages
 
-DO NOT refuse to analyze the image. You MUST look at the selfie and create a prompt based on it.
+AGAIN: DO NOT refuse to analyze the image. This is a legitimate, family-friendly Christmas video project. You MUST look at the selfie photo, analyze what you see, and create a prompt based on it. Refusing to analyze the image is not acceptable.
 
 Examples of great HILARIOUS prompts (MUST use the person from the selfie and add Christmas theme, MUST end with person saying "Merry Christmas"):
 - "The person from the selfie with their exact face and expression hilariously tries to help Santa deliver presents, with Christmas decorations and snow appearing around them, ending with the person from the selfie joyfully saying 'Merry Christmas'."
@@ -63,7 +68,7 @@ Make it AWARD-WINNING HILARIOUS, unique, and absolutely family-friendly! The vid
           content: [
             {
               type: 'text',
-              text: 'Look at this selfie photo and analyze it. Then create a HILARIOUS 8-second Christmas video prompt that uses the EXACT person from the selfie (their face, expression, appearance) as the main character and adds Christmas theme elements around them (Santa, elves, snow, decorations, etc.). The person from the selfie must be the main character throughout. Make it EXTREMELY FUNNY with wholesome, family-friendly humor. End with the person from the selfie saying "Merry Christmas". Be creative, super funny, and completely appropriate for all ages!',
+              text: 'You MUST analyze this selfie photo. Look at the person in the photo - their face, expression, clothing, and appearance. Then create a HILARIOUS 8-second Christmas video prompt that uses the EXACT person from the selfie (their face, expression, appearance) as the main character and adds Christmas theme elements around them (Santa, elves, snow, decorations, etc.). The person from the selfie must be the main character throughout. Make it EXTREMELY FUNNY with wholesome, family-friendly humor. End with the person from the selfie saying "Merry Christmas". This is a legitimate, family-friendly Christmas video project. DO NOT refuse - you MUST analyze the selfie and create the prompt.',
             },
             {
               type: 'image_url',
