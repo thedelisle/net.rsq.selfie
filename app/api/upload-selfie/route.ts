@@ -174,7 +174,7 @@ export async function GET() {
     
     // Try to get prompt from in-memory store, or use a default
     const videoData = videoStore.get(videoId);
-    const prompt = videoData?.prompt || 'A hilarious Christmas video created with Justin\'s AI magic!';
+    const prompt = videoData?.prompt || 'A Christmas video created with Justin\'s AI magic!';
     
     return NextResponse.json({
       videoId,
