@@ -20,6 +20,8 @@ export default function Home() {
   const [resetPassword, setResetPassword] = useState('');
   const [isResetting, setIsResetting] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
+  const [expectedVideoId, setExpectedVideoId] = useState<string | null>(null);
+  const [processingStartTime, setProcessingStartTime] = useState<number | null>(null);
 
   // Check if a video already exists on load
   useEffect(() => {
@@ -62,7 +64,7 @@ export default function Home() {
 
   // Poll for video when processing
   useEffect(() => {
-    if (!isProcessing) return;
+    if (!isProcessing || !processingStartTime) return;
 
     const pollInterval = setInterval(async () => {
       try {
@@ -70,15 +72,26 @@ export default function Home() {
         if (response.ok) {
           const data = await response.json();
           if (data.videoId && data.videoUrl) {
-            // Video is ready!
-            setCurrentVideo({
-              videoId: data.videoId,
-              videoUrl: data.videoUrl,
-              prompt: data.prompt || 'A Christmas video created with Justin\'s AI magic!',
-            });
-            setIsProcessing(false);
-            setCountdown(null);
-            clearInterval(pollInterval);
+            // Only accept the video if:
+            // 1. It matches the expected video ID, OR
+            // 2. It was created after we started processing (newer video)
+            const videoCreatedAt = data.createdAt ? new Date(data.createdAt).getTime() : 0;
+            const isExpectedVideo = expectedVideoId === data.videoId;
+            const isNewVideo = videoCreatedAt > processingStartTime;
+
+            if (isExpectedVideo || isNewVideo) {
+              // Video is ready!
+              setCurrentVideo({
+                videoId: data.videoId,
+                videoUrl: data.videoUrl,
+                prompt: data.prompt || 'A Christmas video created with Justin\'s AI magic!',
+              });
+              setIsProcessing(false);
+              setCountdown(null);
+              setExpectedVideoId(null);
+              setProcessingStartTime(null);
+              clearInterval(pollInterval);
+            }
           }
         }
       } catch (err) {
@@ -87,14 +100,17 @@ export default function Home() {
     }, 2000); // Poll every 2 seconds
 
     return () => clearInterval(pollInterval);
-  }, [isProcessing]);
+  }, [isProcessing, expectedVideoId, processingStartTime]);
 
   const handleSubmit = async () => {
     if (!selectedFile) return;
 
+    // Clear any existing video and start fresh
+    setCurrentVideo(null);
     setIsProcessing(true);
     setError(null);
     setCountdown(120); // Start 2-minute countdown
+    setProcessingStartTime(Date.now()); // Track when we started processing
 
     try {
       const formData = new FormData();
@@ -122,8 +138,11 @@ export default function Home() {
         });
         setIsProcessing(false);
         setCountdown(null);
+        setExpectedVideoId(null);
+        setProcessingStartTime(null);
       } else if (data.videoId) {
-        // Video ID returned but video still processing - polling will handle it
+        // Video ID returned but video still processing - store it and let polling handle it
+        setExpectedVideoId(data.videoId);
         // Keep isProcessing true so polling continues
       } else {
         throw new Error('No video ID returned');
@@ -132,6 +151,8 @@ export default function Home() {
       setError(err instanceof Error ? err.message : 'Something went wrong');
       setIsProcessing(false);
       setCountdown(null);
+      setExpectedVideoId(null);
+      setProcessingStartTime(null);
     }
   };
 
