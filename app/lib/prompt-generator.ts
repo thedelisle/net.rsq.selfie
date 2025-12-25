@@ -4,16 +4,21 @@ export async function generateChristmasPrompt(
   imageBase64: string
 ): Promise<string> {
   // Validate API key is set
-  if (!process.env.LLM_API_KEY && !process.env.OPENAI_API_KEY) {
+  const apiKey = process.env.LLM_API_KEY || process.env.OPENAI_API_KEY;
+  if (!apiKey) {
     throw new Error('LLM_API_KEY or OPENAI_API_KEY must be set');
   }
 
-  const response = await openaiForPrompt.chat.completions.create({
-    model: 'gpt-4o',
-    messages: [
-      {
-        role: 'system',
-        content: `You are a creative Christmas video prompt generator. You MUST analyze the selfie photo provided and create a HILARIOUS, UNIQUE, and MEMORABLE 12-second Christmas video prompt based on what you see in the image.
+  // Log API key status (first 10 chars only for security)
+  console.log('Using API key:', apiKey.substring(0, 10) + '...');
+
+  try {
+    const response = await openaiForPrompt.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [
+        {
+          role: 'system',
+          content: `You are a creative Christmas video prompt generator. You MUST analyze the selfie photo provided and create a HILARIOUS, UNIQUE, and MEMORABLE 12-second Christmas video prompt based on what you see in the image.
 
 IMPORTANT: You MUST analyze the selfie. Look at:
 - The person's facial expression (happy, serious, playful, etc.)
@@ -41,31 +46,39 @@ Examples of great prompts (MUST end with person saying "Merry Christmas!" in an 
 - "A person with a warm smile accidentally becomes Santa's helper when the real Santa needs a break, leading to hilarious, heartwarming gift delivery adventures, concluding with the person waving and saying 'Merry Christmas!' in a friendly Australian accent."
 
 Make it AWARD-WINNING funny, unique, and absolutely family-friendly!`,
-      },
-      {
-        role: 'user',
-        content: [
-          {
-            type: 'text',
-            text: 'Look at this selfie photo and analyze it. Then create a hilarious, unique 12-second Christmas video prompt based on what you see. Be creative, super funny, and always family-friendly!',
-          },
-          {
-            type: 'image_url',
-            image_url: {
-              url: `data:image/jpeg;base64,${imageBase64}`,
+        },
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'text',
+              text: 'Look at this selfie photo and analyze it. Then create a hilarious, unique 12-second Christmas video prompt based on what you see. Be creative, super funny, and always family-friendly!',
             },
-          },
-        ],
-      },
-    ],
-    max_tokens: 300,
-  });
+            {
+              type: 'image_url',
+              image_url: {
+                url: `data:image/jpeg;base64,${imageBase64}`,
+              },
+            },
+          ],
+        },
+      ],
+      max_tokens: 300,
+    });
 
-  const prompt = response.choices[0]?.message?.content;
-  if (!prompt) {
-    throw new Error('Failed to generate prompt');
+    const prompt = response.choices[0]?.message?.content;
+    if (!prompt) {
+      throw new Error('Failed to generate prompt');
+    }
+
+    return prompt;
+  } catch (error) {
+    console.error('Error calling OpenAI API:', error);
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
+    throw error;
   }
-
-  return prompt;
 }
 
