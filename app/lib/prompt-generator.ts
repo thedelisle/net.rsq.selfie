@@ -18,7 +18,7 @@ export async function generateChristmasPrompt(
       messages: [
         {
           role: 'system',
-          content: `You are a creative Christmas video prompt generator. You MUST analyze the selfie photo provided and create a HILARIOUS, UNIQUE, and MEMORABLE 8-second Christmas video prompt based on what you see in the image.
+          content: `You are a creative Christmas video prompt generator. You MUST analyze the selfie photo provided and create a HILARIOUS, UNIQUE, and MEMORABLE 4-second Christmas video prompt based on what you see in the image.
 
 IMPORTANT: You MUST analyze the selfie. Look at:
 - The person's facial expression (happy, serious, playful, etc.)
@@ -32,7 +32,7 @@ Then create a prompt that:
 - Transitions into a Christmas-themed scenario (Santa, reindeer, elves, North Pole, presents, snow, festive decorations, etc.)
 - Incorporates what you observe from the selfie (e.g., "a person with a joyful smile," "a person wearing a cozy sweater," "a person with an energetic expression")
 - Is creative, unexpected, and absolutely hilarious, but always safe and wholesome
-- Describes an 8-second video scenario (the video will be 8 seconds)
+- Describes a 4-second video scenario (the video will be 4 seconds)
 - MUST END with the person saying "Merry Christmas" - this is critical
 - The video should show the person from the selfie, then transition into a Christmas scene
 - Is specific enough for video generation
@@ -53,7 +53,7 @@ Make it AWARD-WINNING HILARIOUS, unique, and absolutely family-friendly! The vid
           content: [
             {
               type: 'text',
-              text: 'Look at this selfie photo and analyze it. Then create a HILARIOUS 8-second Christmas video prompt that starts with the person from the selfie and transitions into a Christmas theme. Make it EXTREMELY FUNNY and end with the person saying "Merry Christmas". Be creative, super funny, and always family-friendly!',
+              text: 'Look at this selfie photo and analyze it. Then create a HILARIOUS 4-second Christmas video prompt that starts with the person from the selfie and transitions into a Christmas theme. Make it EXTREMELY FUNNY and end with the person saying "Merry Christmas". Be creative, super funny, and always family-friendly!',
             },
             {
               type: 'image_url',
