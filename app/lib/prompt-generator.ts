@@ -87,6 +87,19 @@ Make it AWARD-WINNING HILARIOUS, unique, and absolutely family-friendly! The vid
       throw new Error('Failed to generate prompt');
     }
 
+    // Check if GPT-4 refused to analyze the image
+    const lowerPrompt = prompt.toLowerCase();
+    if (lowerPrompt.includes("i can't") || 
+        lowerPrompt.includes("i cannot") || 
+        lowerPrompt.includes("i'm sorry") ||
+        lowerPrompt.includes("i apologize") ||
+        lowerPrompt.includes("unable to") ||
+        lowerPrompt.includes("refuse") ||
+        lowerPrompt.includes("can't assist")) {
+      console.error('GPT-4 refused to analyze the selfie. Prompt:', prompt);
+      throw new Error('The AI model refused to analyze the selfie. Please try again with a different photo or contact support.');
+    }
+
     return prompt;
   } catch (error) {
     console.error('Error calling OpenAI API:', error);
