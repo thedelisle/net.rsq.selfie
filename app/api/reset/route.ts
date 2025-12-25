@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { resetCurrentVideo } from '@/app/api/upload-selfie/route';
-import { listVideosFromBlob, deleteVideoFromBlob } from '@/app/lib/blob';
+import { resetCurrentVideo } from '@/app/lib/video-store';
 
 export async function POST(request: NextRequest) {
   try {

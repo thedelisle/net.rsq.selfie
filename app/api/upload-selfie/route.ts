@@ -3,25 +3,12 @@ import { generateChristmasPrompt } from '@/app/lib/prompt-generator';
 import { uploadToBlob } from '@/app/lib/blob';
 import { randomBytes } from 'crypto';
 import Replicate from 'replicate';
-
-// Simple in-memory store for video metadata (in production, use a database)
-const videoStore = new Map<string, { url: string; prompt: string; createdAt: Date }>();
-
-// Store the single current video ID (only one video can exist at a time)
-let currentVideoId: string | null = null;
-
-// Function to reset the current video
-export function resetCurrentVideo() {
-  if (currentVideoId) {
-    videoStore.delete(currentVideoId);
-    currentVideoId = null;
-  }
-}
+import { videoStore, getCurrentVideoId, setCurrentVideoId } from '@/app/lib/video-store';
 
 export async function POST(request: NextRequest) {
   try {
     // Check if a video already exists
-    if (currentVideoId) {
+    if (getCurrentVideoId()) {
       return NextResponse.json({ error: 'A video has already been created. Please reset first.' }, { status: 400 });
     }
 
@@ -150,7 +137,7 @@ export async function POST(request: NextRequest) {
     });
     
     // Set this as the current video (only one allowed)
-    currentVideoId = videoId;
+    setCurrentVideoId(videoId);
     
     return NextResponse.json({
       videoId,
@@ -167,12 +154,6 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
-
-// Export video store and getter for current video ID
-export { videoStore };
-export function getCurrentVideoId() {
-  return currentVideoId;
 }
 
 // API endpoint to get current video - checks blob storage for latest video

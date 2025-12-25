@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { videoStore } from '@/app/api/upload-selfie/route';
+import { videoStore } from '@/app/lib/video-store';
 
 export async function GET(
   request: NextRequest,
