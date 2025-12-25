@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
         input: {
           prompt: prompt, // OpenAI GPT-4 Vision generated this prompt
           image: imageInput, // Selfie image
-          duration: 6, // Must be 4, 6, or 8 seconds (using 6 seconds)
+          duration: 8, // Must be 4, 6, or 8 seconds (using 8 seconds)
         }
       }
     );
